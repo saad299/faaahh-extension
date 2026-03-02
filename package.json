@@ -6,8 +6,9 @@
   "publisher": "msaadahmad",
   "repository": {
     "type": "git",
-    "url": "https://github.com/saad299/faaaah-extension"
+    "url": "https://github.com/saad299/faaahh-extension"
   },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.109.5"
   },
