@@ -1,0 +1,60 @@
+{
+  "name": "faaaahtrigger",
+  "displayName": "FAAAAH! - Test Failure Sound",
+  "description": "Plays a dramatic 'FAAAAH' sound whenever your tests fail. You deserve to feel it.",
+  "version": "1.0.1",
+  "publisher": "msaadahmad",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saad299/faaaah-extension"
+  },
+  "engines": {
+    "vscode": "^1.109.5"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "FAAAAH",
+      "properties": {
+        "faaaah.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable the FAAAAH sound on test failure"
+        },
+        "faaaah.volume": {
+          "type": "number",
+          "default": 0.8,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Volume of the FAAAAH sound (0.0 - 1.0)"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "faaaah.testSound",
+        "title": "FAAAAH: Test the sound"
+      },
+      {
+        "command": "faaaah.toggle",
+        "title": "FAAAAH: Toggle on/off"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.93.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}
