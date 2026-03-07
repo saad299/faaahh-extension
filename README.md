@@ -3,6 +3,11 @@
 A playful extension that plays a loud **FAAAAH!** whenever a terminal command or task exits with a non‑zero code
 (typically a failing test run). It's meant to make failures impossible to ignore and add a little levity to debugging.
 
+> ### Version 1.1.1
+> 1. fixed an issue in which the mute/unmute status was not showing properly
+> 2. Removed the annoying error popup meesage. Now you can see the error message on the status bar
+> 3. Added icon
+
 ## Features
 
 - Automatically listens for:

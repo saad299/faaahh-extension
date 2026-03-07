@@ -2,13 +2,28 @@
   "name": "faaaahtrigger",
   "displayName": "FAAAAH! - Test Failure Sound",
   "description": "Plays a dramatic 'FAAAAH' sound whenever your tests fail. You deserve to feel it.",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "publisher": "msaadahmad",
   "repository": {
     "type": "git",
     "url": "https://github.com/saad299/faaahh-extension"
   },
   "license": "MIT",
+  "keywords": [
+  "faaaah",
+  "sound",
+  "fail",
+  "test",
+  "meme",
+  "fun",
+  "notification",
+  "testing",
+  "jest",
+  "pytest",
+  "developer tools",
+  "productivity"
+],
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.109.5"
   },

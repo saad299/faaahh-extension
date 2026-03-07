@@ -145,7 +145,8 @@ export function activate(context: vscode.ExtensionContext): void {
   // Status bar toggle
   statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   statusBarItem.command = 'faaaah.toggle';
-  updateStatusBar();
+  const initialEnabled = vscode.workspace.getConfiguration('faaaah').get<boolean>('enabled', true);
+  updateStatusBar(initialEnabled);
   statusBarItem.show();
   context.subscriptions.push(statusBarItem);
 
@@ -196,13 +197,14 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('faaaah.toggle', () => {
+    vscode.commands.registerCommand('faaaah.toggle', async () => {
       const config = vscode.workspace.getConfiguration('faaaah');
       const current = config.get<boolean>('enabled', true);
-      config.update('enabled', !current, vscode.ConfigurationTarget.Global);
-      updateStatusBar();
+      const newValue = !current;
+      await config.update('enabled', newValue, vscode.ConfigurationTarget.Global);
+      updateStatusBar(newValue);
       vscode.window.showInformationMessage(
-        `FAAAAH is now ${!current ? '🔊 ON' : '🔇 OFF'}`
+        `FAAAAH is now ${newValue ? '🔊 ON' : '🔇 OFF'}`
       );
     })
   );
@@ -215,7 +217,8 @@ async function triggerFaaaah(): Promise<void> {
   const volume = config.get<number>('volume', 0.8);
 
   // Show notification
-  vscode.window.showWarningMessage('💥 FAAAAH! Tests failed!');
+  // vscode.window.showWarningMessage('💥 FAAAAH! You got error!');
+  vscode.window.setStatusBarMessage('💥💥 FAAAAH! You got error! 💥💥', 3200);
 
   try {
     await playFaaaah(volume);
@@ -225,9 +228,7 @@ async function triggerFaaaah(): Promise<void> {
   }
 }
 
-function updateStatusBar(): void {
-  const config = vscode.workspace.getConfiguration('faaaah');
-  const enabled = config.get<boolean>('enabled', true);
+function updateStatusBar(enabled: boolean): void {
   statusBarItem.text = enabled ? '$(unmute) FAAAAH' : '$(mute) FAAAAH';
   statusBarItem.tooltip = enabled
     ? 'FAAAAH is active — click to mute'

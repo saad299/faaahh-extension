@@ -127,7 +127,8 @@ function activate(context) {
     // Status bar toggle
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.command = 'faaaah.toggle';
-    updateStatusBar();
+    const initialEnabled = vscode.workspace.getConfiguration('faaaah').get('enabled', true);
+    updateStatusBar(initialEnabled);
     statusBarItem.show();
     context.subscriptions.push(statusBarItem);
     // Watch terminal output for test failures
@@ -172,12 +173,13 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('faaaah.testSound', async () => {
         await triggerFaaaah();
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('faaaah.toggle', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('faaaah.toggle', async () => {
         const config = vscode.workspace.getConfiguration('faaaah');
         const current = config.get('enabled', true);
-        config.update('enabled', !current, vscode.ConfigurationTarget.Global);
-        updateStatusBar();
-        vscode.window.showInformationMessage(`FAAAAH is now ${!current ? '🔊 ON' : '🔇 OFF'}`);
+        const newValue = !current;
+        await config.update('enabled', newValue, vscode.ConfigurationTarget.Global);
+        updateStatusBar(newValue);
+        vscode.window.showInformationMessage(`FAAAAH is now ${newValue ? '🔊 ON' : '🔇 OFF'}`);
     }));
     vscode.window.showInformationMessage('🔊 FAAAAH extension loaded. May your tests pass. 🙏');
 }
@@ -185,7 +187,8 @@ async function triggerFaaaah() {
     const config = vscode.workspace.getConfiguration('faaaah');
     const volume = config.get('volume', 0.8);
     // Show notification
-    vscode.window.showWarningMessage('💥 FAAAAH! Tests failed!');
+    // vscode.window.showWarningMessage('💥 FAAAAH! You got error!');
+    vscode.window.setStatusBarMessage('💥💥 FAAAAH! You got error! 💥💥', 3200);
     try {
         await playFaaaah(volume);
     }
@@ -194,9 +197,7 @@ async function triggerFaaaah() {
         console.error('[FAAAAH] Could not play sound:', err);
     }
 }
-function updateStatusBar() {
-    const config = vscode.workspace.getConfiguration('faaaah');
-    const enabled = config.get('enabled', true);
+function updateStatusBar(enabled) {
     statusBarItem.text = enabled ? '$(unmute) FAAAAH' : '$(mute) FAAAAH';
     statusBarItem.tooltip = enabled
         ? 'FAAAAH is active — click to mute'
